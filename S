@@ -1,0 +1,32 @@
+document.getElementById('activityForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const activity = document.getElementById('activity').value;
+    const time = document.getElementById('time').value;
+
+    const activityList = document.getElementById('activityList');
+    const activityItem = document.createElement('div');
+    activityItem.className = 'activity-item';
+    activityItem.textContent = `${time} - ${activity}`;
+    activityList.appendChild(activityItem);
+
+    document.getElementById('activityForm').reset();
+});
+
+document.getElementById('exportButton').addEventListener('click', function() {
+    const activityList = document.getElementById('activityList');
+    const activities = activityList.getElementsByClassName('activity-item');
+    let content = 'Daily Activity Report\n\n';
+
+    for (let activity of activities) {
+        content += `${activity.textContent}\n`;
+    }
+
+    const blob = new Blob([content], { type: 'application/msword' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'Daily_Activity_Report.doc';
+    a.click();
+    URL.revokeObjectURL(url);
+});
